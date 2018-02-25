@@ -23,7 +23,7 @@ ENV KOHA_ADMINUSER admin
 ENV KOHA_ADMINPASS secret
 ENV KOHA_INSTANCE  name
 ENV KOHA_ZEBRAUSER zebrauser
-ENV KOHA_ZEBRAPASS lkjasdpoiqrr
+ENV KOHA_ZEBRAPASS zebraa
 
 #######
 # Mysql config for initial db
@@ -46,7 +46,7 @@ RUN echo "search deich.folkebibl.no guest.oslo.kommune.no\nnameserver 10.172.2.1
     echo "deb http://static.deichman.no/repositories/koha/public/ wheezy main" > /etc/apt/sources.list.d/deichman.list && \
     echo "deb http://debian.koha-community.org/koha stable main" > /etc/apt/sources.list.d/koha.list && \
     wget -q -O- http://debian.koha-community.org/koha/gpg.asc | apt-key add - && \
-    apt-get update && apt-get install -y --force-yes koha-common=$KOHA_RELEASE && apt-get clean
+    apt-get update && apt-get install -y --force-yes koha-common && apt-get clean
 
 
 # Script and deps for checking if koha is up & ready (to be executed using docker exec)
@@ -86,8 +86,7 @@ RUN echo "\nListen 8080\nListen 8081" | tee /etc/apache2/ports.conf && \
     a2enmod rewrite headers proxy_http cgi remoteip
 
 # LinkMobiblity SMS Driver - SMS modules need to be in shared perl libs
-RUN mkdir -p /usr/share/perl5/SMS/Send/NO && \
-  cp /usr/share/koha/intranet/cgi-bin/sms/LinkMobilityHTTP.pm /usr/share/perl5/SMS/Send/NO/LinkMobilityHTTP.pm
+
 
 # Template for batch print notices
 RUN cp /templates/global/print-notices-deichman.tt /usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/modules/batch/

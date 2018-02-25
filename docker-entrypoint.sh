@@ -16,6 +16,7 @@ envsubst < /templates/global/supervisord.conf.tmpl > /etc/supervisor/conf.d/supe
 echo "Mysql server setup ..."
 if ping -c 1 -W 1 $KOHA_DBHOST ; then
   printf "Using linked mysql container $KOHA_DBHOST\n"
+  echo "$KOHA_DBHOST koha_mysql" >> /etc/hosts
 else
   printf "Unable to connect to linked mysql container $KOHA_DBHOST\n-- initializing local mysql ...\n"
   /etc/init.d/mysql start

@@ -3,17 +3,13 @@ version: '2.1'
 
 services:
   koha_build:
-    container_name: koha_build
-    image: "digibib/koha:${GITREF}"
+    container_name: "koha"
+    image: "kohaimg"
     build:
-      context: "${KOHAPATH}"
+      context: "/home/node1/koha-docker"
       dockerfile: Dockerfile
       args:
-        KOHA_RELEASE: "$KOHA_RELEASE"
-    networks:
-      - backend
-    depends_on:
-      - koha_mysql
+        KOHA_RELEASE: "17.11"
     cap_add:
       - SYS_NICE
       - DAC_READ_SEARCH
@@ -23,19 +19,19 @@ services:
       KOHA_ADMINPASS: "${KOHA_ADMINPASS:-secret}"
       KOHA_ADMINUSER: "${KOHA_ADMINUSER:-admin}"
       KOHA_INSTANCE: "${KOHA_INSTANCE:-name}"
-      KOHA_DBHOST: koha_mysql
-      INSTALL_LANGUAGES: "${INSTALL_LANGUAGES}"
-      DEFAULT_LANGUAGE: "${DEFAULT_LANGUAGE}"
+      KOHA_DBHOST: "1.1.1.2"
+      INSTALL_LANGUAGES: "tr-TR"
+      DEFAULT_LANGUAGE: "tr-TR"
       EMAIL_ENABLED: "True"
       ENABLE_MYSQL_TRIGGERS: "${ENABLE_MYSQL_TRIGGERS}"
       ENABLE_MYSQL_SCHEMA: "${ENABLE_MYSQL_SCHEMA}"
-      SMTP_SERVER_HOST: mailrelay # access through network 'backend'
+      SMTP_SERVER_HOST: localhost # access through network 'backend'
       SMTP_SERVER_PORT: 2525
       MESSAGE_QUEUE_FREQUENCY: 15
       SMS_DRIVER: "${SMS_DRIVER:-NO::LinkMobilityHTTP}"
       SMS_USER: "${SMS_USER:-smsuser}"
       SMS_PASS: "${SMS_PASS:-smspass}"
-      API_PASSPHRASE: "${API_PASSPHRASE:-ChangeMe}"
+      API_PASSPHRASE: "${API_PASSPHRASE:-changeme}"
       NLENABLE: "${NLENABLE:-0}"
       NLBASEUSER: "${NLBASEUSER:-nlbaseuser}"
       NLBASEPASS: "${NLBASEPASS:-nlbasepass}"
@@ -62,8 +58,9 @@ services:
       ILLUSER: "${ILLUSER:-illuser}"
       ILLNAME: "${ILLNAME:-Interlibrary loan}"
     ports:
-      - "6001:6001"
-      - "8081:8081"
+      - "1000:6001"
+      - "2000:8081"
+      - "3000:8080"
     logging:
       driver: "json-file"
       options:
